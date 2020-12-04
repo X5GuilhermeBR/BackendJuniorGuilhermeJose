@@ -1,5 +1,7 @@
 package br.com.employee.system.api.domain.models;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonInclude;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
@@ -14,12 +16,26 @@ import javax.validation.constraints.NotEmpty;
 @EntityListeners(AuditingEntityListener.class)
 @Table(name = "tb_employee")
 public class Employee {
-        /**
-         * O cpf.
-         */
-        @Id
-        @GeneratedValue(strategy = GenerationType.IDENTITY)
-        private int id;
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private int id;
+
+    @ManyToOne
+    @JsonIgnore
+    @JoinColumn(name = "sector_id")
+    private Sector sector;
+
+    public Sector getSector() {
+        return sector;
+    }
+
+    public void setSector(Sector sector) {
+        this.sector = sector;
+    }
+//    @NotNull
+//    @Column(name = "id_sector")
+//    private int id_sector;
 
     public String getCpf() {
         return cpf;
@@ -104,20 +120,16 @@ public class Employee {
         this.created_at = created_at;
     }
 
-    public int getId_sector() {
-        return id_sector;
-    }
-
-    public void setId_sector(int id_sector) {
-        this.id_sector = id_sector;
-    }
+//    public int getId_sector() {
+//        return id_sector;
+//    }
+//
+//    public void setId_sector(int id_sector) {
+//        this.id_sector = id_sector;
+//    }
 
     @CreatedDate
     @Column(name = "created_at")
     private Date created_at;
-
-    @NotNull
-    @Column(name = "id_sector")
-    private int id_sector;
 
 }

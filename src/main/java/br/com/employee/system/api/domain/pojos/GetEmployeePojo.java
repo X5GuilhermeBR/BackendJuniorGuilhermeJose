@@ -1,5 +1,6 @@
 package br.com.employee.system.api.domain.pojos;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import org.springframework.data.annotation.CreatedDate;
 
@@ -27,11 +28,11 @@ public class GetEmployeePojo {
         this.id = id;
     }
 
-    @JsonProperty("cpf")
-    private String cpf;
-
     @JsonProperty("name")
     private String name;
+
+    @JsonProperty("cpf")
+    private String cpf;
 
     @JsonProperty("telephone")
     private String telephone;
@@ -39,11 +40,28 @@ public class GetEmployeePojo {
     @JsonProperty("email")
     private String email;
 
+    @JsonInclude(JsonInclude.Include.NON_NULL)
+    @JsonProperty("age")
+    private long age;
 
+    public long getAge() {
+        return age;
+    }
+
+    public void setAge(long age) {
+        this.age = age;
+    }
+
+    @JsonInclude(JsonInclude.Include.NON_NULL)
     @JsonProperty("dt_birth")
     private LocalDate dt_birth;
 
+    @JsonInclude(JsonInclude.Include.NON_NULL)
+    @JsonProperty("id_sector")
+    private int id_sector;
+
     @CreatedDate
+    @JsonInclude(JsonInclude.Include.NON_NULL)
     @JsonProperty("created_at")
     private Date created_at;
 
@@ -62,9 +80,6 @@ public class GetEmployeePojo {
     public void setId_sector(int id_sector) {
         this.id_sector = id_sector;
     }
-
-    @JsonProperty("id_sector")
-    private int id_sector;
 
     public String getName() {
         return name;

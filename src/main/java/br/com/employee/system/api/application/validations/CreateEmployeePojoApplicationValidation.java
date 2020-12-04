@@ -2,13 +2,14 @@ package br.com.employee.system.api.application.validations;
 
 import br.com.employee.system.api.domain.enums.ErrorType;
 import br.com.employee.system.api.domain.models.Employee;
+import br.com.employee.system.api.domain.models.Sector;
 import br.com.employee.system.api.domain.models.UserBlacklist;
 import br.com.employee.system.api.domain.pojos.CreateEmployeePojo;
 import br.com.employee.system.api.domain.pojos.GetValidationPojo;
 import br.com.employee.system.api.domain.repositories.EmployeeRepository;
+import br.com.employee.system.api.domain.repositories.SectorRepository;
 import br.com.employee.system.api.domain.validations.CreateEmployeePojoValidation;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import org.apache.http.message.BasicNameValuePair;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -17,7 +18,6 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
-import java.util.ArrayList;
 import java.util.List;
 
 @Service("createEmployeePojoValidation")
@@ -25,6 +25,9 @@ public class CreateEmployeePojoApplicationValidation implements CreateEmployeePo
 
     @Autowired
     private EmployeeRepository employeeRepository;
+
+    @Autowired
+    private SectorRepository sectorRepository;
 
     @Override
     public GetValidationPojo execute (final CreateEmployeePojo request) throws IOException {
@@ -59,6 +62,12 @@ public class CreateEmployeePojoApplicationValidation implements CreateEmployeePo
 
         if (employee != null) {
             return new GetValidationPojo(ErrorType.DUPLICATED_EMAIL);
+        }
+
+        final Sector sector = sectorRepository.findById(request.getId_sector());
+
+        if (sector == null) {
+            return new GetValidationPojo(ErrorType.SECTOR_NOT_EXIST);
         }
 
         return null;
@@ -97,7 +106,7 @@ public class CreateEmployeePojoApplicationValidation implements CreateEmployeePo
         HttpURLConnection con = (HttpURLConnection) obj.openConnection();
         con.setRequestMethod("GET");
         con.setRequestProperty("Content-Type", "application/json");
-        int responseCode = con.getResponseCode();
+
         BufferedReader in = new BufferedReader(new InputStreamReader((con.getInputStream())));
         String inputLine;
         StringBuffer response = new StringBuffer();
@@ -111,7 +120,13 @@ public class CreateEmployeePojoApplicationValidation implements CreateEmployeePo
 
         in.close();
 
-        if (userBlacklists[0].getCpf() == cpf){
+        String result = response.toString();
+
+        result = result.replace("[", " ");
+        result = result.replace("]", " ");
+
+
+        if (result.isEmpty() && userBlacklists[0].getCpf() == cpf){
             return true;
         }
 

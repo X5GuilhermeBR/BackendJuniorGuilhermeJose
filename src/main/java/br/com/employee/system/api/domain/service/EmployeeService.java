@@ -13,4 +13,6 @@ public interface EmployeeService {
     BasePojo delete(int id);
 
     BasePojo get(int id);
+
+    BasePojo getAll();
 }

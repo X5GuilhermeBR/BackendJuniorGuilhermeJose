@@ -11,7 +11,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
-import java.util.Map;
 
 @RestController
 public class EmployeeController {
@@ -38,6 +37,14 @@ public class EmployeeController {
     @GetMapping(value = "/employee/{idEmployee}")
     public ResponseEntity get(@PathVariable final int idEmployee) {
         final BasePojo response = employeeService.get(idEmployee);
+        final HttpStatus status = HttpHelper.convertToHttpStatus(response.getStatus());
+
+        return ResponseEntity.status(status).body(response.getPojo());
+    }
+
+    @GetMapping(value = "/employee")
+    public ResponseEntity get() {
+        final BasePojo response = employeeService.getAll();
         final HttpStatus status = HttpHelper.convertToHttpStatus(response.getStatus());
 
         return ResponseEntity.status(status).body(response.getPojo());
