@@ -9,6 +9,7 @@ public enum ErrorType {
     LIMIT_AGE_REACHED(422005, "Limite de funcionários com idade menor de 18 ou maior de 65 atingido."),
     USER_BANNED(422006, "Não é possível prosseguir com o registro do usuário. O mesmo se encontra na BlackList"),
     SECTOR_NOT_EXIST(422007, "O id do setor informado não existe"),
+    INVALID_AGE(422007, "Ano de nascimento inválido. Este usuário possuí menos de 14 anos."),
     REQUIRED_FEATURE_NAME(422012, "O nome da Funcionalidade é obrigaória."),
     APPLICATION_NOT_FOUNDED(403001, "Credenciais de aplicação para acesso ao recurso inválidas."),
     PROFILE_FEATURE_NOT_FOUNDED(404006, "Perfil ou funcionalidade não encontrada no sistema."),

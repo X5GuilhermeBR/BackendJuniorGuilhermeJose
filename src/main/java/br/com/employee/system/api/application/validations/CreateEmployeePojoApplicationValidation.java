@@ -32,6 +32,8 @@ public class CreateEmployeePojoApplicationValidation implements CreateEmployeePo
     @Override
     public GetValidationPojo execute (final CreateEmployeePojo request) throws IOException {
 
+        LocalDate currentDate = LocalDate.now();
+
         if (request == null) {
             return new GetValidationPojo(ErrorType.NULLABLE_REQUEST);
         }
@@ -42,7 +44,15 @@ public class CreateEmployeePojoApplicationValidation implements CreateEmployeePo
             return new GetValidationPojo(ErrorType.USER_BANNED);
         }
 
-        boolean availableSpace = checkAgePercentage(request.getDt_birth());
+        boolean checkAge = checkAge(request.getDt_birth(), currentDate);
+
+        if (checkAge == true){
+            return new GetValidationPojo(ErrorType.INVALID_AGE);
+        }
+
+
+
+        boolean availableSpace = checkAgePercentage(request.getDt_birth(), currentDate);
 
         if (availableSpace == true){
             return new GetValidationPojo(ErrorType.LIMIT_AGE_REACHED);
@@ -74,12 +84,11 @@ public class CreateEmployeePojoApplicationValidation implements CreateEmployeePo
 
     }
 
-    public boolean checkAgePercentage (LocalDate birthEmployee){
-        LocalDate date = LocalDate.now();
+    public boolean checkAgePercentage (LocalDate birthEmployee, LocalDate currentDate){
 
-        long years = ChronoUnit.YEARS.between(birthEmployee,date);
+        long years = ChronoUnit.YEARS.between(birthEmployee, currentDate);
 
-        int count = employeeRepository.findAllUserUnderEighteenYearsOld(date);
+        int count = employeeRepository.findAllUserUnderEighteenYearsOld(currentDate);
 
         List<Employee> employees = employeeRepository.findAll();
 
@@ -89,7 +98,7 @@ public class CreateEmployeePojoApplicationValidation implements CreateEmployeePo
             return true;
         }
 
-        count = employeeRepository.findAllUserAboveSixtyFiveYearsOld(date);
+        count = employeeRepository.findAllUserAboveSixtyFiveYearsOld(currentDate);
 
         result = employees.size() * 0.20;
 
@@ -98,6 +107,20 @@ public class CreateEmployeePojoApplicationValidation implements CreateEmployeePo
         }
 
     return false;
+
+    }
+
+    public boolean checkAge (LocalDate birthEmployee, LocalDate currentDate){
+
+        long minimumAgeToWork = 14;
+
+        long years = ChronoUnit.YEARS.between(birthEmployee,currentDate);
+
+        if (years < minimumAgeToWork){
+            return true;
+        }
+
+        return false;
 
     }
 
@@ -126,7 +149,7 @@ public class CreateEmployeePojoApplicationValidation implements CreateEmployeePo
         result = result.replace("]", " ");
 
 
-        if (result.isEmpty() && userBlacklists[0].getCpf() == cpf){
+        if (!result.trim().isEmpty() && userBlacklists[0].getCpf().equals(cpf)){
             return true;
         }
 

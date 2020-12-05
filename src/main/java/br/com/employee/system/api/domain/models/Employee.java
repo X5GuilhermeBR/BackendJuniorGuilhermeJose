@@ -21,7 +21,7 @@ public class Employee {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JsonIgnore
     @JoinColumn(name = "sector_id")
     private Sector sector;
@@ -33,9 +33,6 @@ public class Employee {
     public void setSector(Sector sector) {
         this.sector = sector;
     }
-//    @NotNull
-//    @Column(name = "id_sector")
-//    private int id_sector;
 
     public String getCpf() {
         return cpf;
