@@ -18,6 +18,7 @@ public class EmployeeController {
     @Autowired
     private EmployeeService employeeService;
 
+    @CrossOrigin
     @PostMapping(value = "/employee")
     public ResponseEntity post(@RequestBody final CreateEmployeePojo request) throws IOException {
         final BasePojo response = employeeService.create(request);
@@ -26,6 +27,7 @@ public class EmployeeController {
         return ResponseEntity.status(status).body(response.getPojo());
     }
 
+    @CrossOrigin
     @DeleteMapping(value = "/employee/{idEmployee}")
     public ResponseEntity delete(@PathVariable final int idEmployee) {
         final BasePojo response = employeeService.delete(idEmployee);
@@ -34,6 +36,7 @@ public class EmployeeController {
         return ResponseEntity.status(status).body(response.getPojo());
     }
 
+    @CrossOrigin
     @GetMapping(value = "/employee/{idEmployee}")
     public ResponseEntity get(@PathVariable final int idEmployee) {
         final BasePojo response = employeeService.get(idEmployee);
@@ -42,6 +45,7 @@ public class EmployeeController {
         return ResponseEntity.status(status).body(response.getPojo());
     }
 
+    @CrossOrigin
     @GetMapping(value = "/employee")
     public ResponseEntity get() {
         final BasePojo response = employeeService.getAll();

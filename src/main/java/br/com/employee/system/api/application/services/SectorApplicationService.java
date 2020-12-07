@@ -1,13 +1,9 @@
 package br.com.employee.system.api.application.services;
 
-import br.com.employee.system.api.domain.models.Employee;
 import br.com.employee.system.api.domain.models.Sector;
 import br.com.employee.system.api.domain.pojos.BasePojo;
-import br.com.employee.system.api.domain.pojos.GetEmployeePojo;
 import br.com.employee.system.api.domain.pojos.GetSectorPojo;
-import br.com.employee.system.api.domain.repositories.EmployeeRepository;
 import br.com.employee.system.api.domain.repositories.SectorRepository;
-import br.com.employee.system.api.domain.service.EmployeeService;
 import br.com.employee.system.api.domain.service.SectorService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
